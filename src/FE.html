@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Insert Data</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; }
+    label { display: block; margin-top: 10px; }
+    input, select { padding: 6px; width: 300px; }
+    button { margin-top: 15px; padding: 8px 12px; }
+    .form-section { display: none; margin-top: 20px; }
+    #message { margin-top: 20px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Insert Data</h1>
+  
+  <!-- Select the type of object -->
+  <label for="entityType">Select Entity Type:</label>
+  <select id="entityType">
+    <option value="">--Select an Entity--</option>
+    <option value="Student">Student</option>
+    <option value="Dorm">Dorm</option>
+    <option value="Course">Course</option>
+    <option value="Department">Department</option>
+    <!-- Add more options here as needed -->
+  </select>
+  
+  <!-- Student Form -->
+  <div id="StudentForm" class="form-section">
+    <h2>Insert Student</h2>
+    <label for="studentID">Student ID:</label>
+    <input type="number" id="studentID" name="StudentID" required>
+    
+    <label for="firstname">First Name:</label>
+    <input type="text" id="firstname" name="Firstname" required>
+    
+    <label for="surname">Surname:</label>
+    <input type="text" id="surname" name="Surname" required>
+    
+    <label for="dob">Date of Birth:</label>
+    <input type="date" id="dob" name="DateOfBirth" required>
+    
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="Email" required>
+  </div>
+  
+  <!-- Dorm Form -->
+  <div id="DormForm" class="form-section">
+    <h2>Insert Dorm</h2>
+    <label for="roomID">Room ID:</label>
+    <input type="number" id="roomID" name="RoomID" required>
+    
+    <label for="building">Building:</label>
+    <input type="text" id="building" name="Building" required>
+    
+    <label for="room">Room:</label>
+    <input type="text" id="room" name="Room" required>
+  </div>
+  
+  <!-- Course Form -->
+  <div id="CourseForm" class="form-section">
+    <h2>Insert Course</h2>
+    <label for="crn">CRN:</label>
+    <input type="text" id="crn" name="CRN" required>
+    
+    <label for="courseName">Course Name:</label>
+    <input type="text" id="courseName" name="CourseName" required>
+    
+    <label for="credits">Credits:</label>
+    <input type="number" id="credits" name="Credits" required>
+  </div>
+  
+  <!-- Department Form -->
+  <div id="DepartmentForm" class="form-section">
+    <h2>Insert Department</h2>
+    <label for="departmentID">Department ID:</label>
+    <input type="number" id="departmentID" name="DepartmentID" required>
+    
+    <label for="departmentName">Department Name:</label>
+    <input type="text" id="departmentName" name="DepartmentName" required>
+  </div>
+  
+  <!-- Button to submit the selected form -->
+  <button id="submitBtn" style="display: none;">Insert Data</button>
+  
+  <div id="message"></div>
+  
+  <script>
+    const entityTypeSelect = document.getElementById('entityType');
+    const submitBtn = document.getElementById('submitBtn');
+    const messageDiv = document.getElementById('message');
+    const formSections = document.querySelectorAll('.form-section');
+
+    // Hide all form sections initially.
+    formSections.forEach(section => section.style.display = 'none');
+    
+    // Show the corresponding form when an entity type is selected.
+    entityTypeSelect.addEventListener('change', function() {
+      formSections.forEach(section => section.style.display = 'none');
+      messageDiv.textContent = "";
+      
+      const selectedType = entityTypeSelect.value;
+      if (selectedType) {
+        document.getElementById(selectedType + 'Form').style.display = 'block';
+        submitBtn.style.display = 'block';
+      } else {
+        submitBtn.style.display = 'none';
+      }
+    });
+    
+    // Submit the form data.
+    submitBtn.addEventListener('click', async function() {
+      const selectedType = entityTypeSelect.value;
+      let data = {};
+      
+      if (selectedType === "Student") {
+        data = {
+          StudentID: parseInt(document.getElementById("studentID").value),
+          Firstname: document.getElementById("firstname").value,
+          Surname: document.getElementById("surname").value,
+          DateOfBirth: document.getElementById("dob").value,
+          Email: document.getElementById("email").value,
+        };
+      } else if (selectedType === "Dorm") {
+        data = {
+          RoomID: parseInt(document.getElementById("roomID").value),
+          Building: document.getElementById("building").value,
+          Room: document.getElementById("room").value,
+        };
+      } else if (selectedType === "Course") {
+        data = {
+          CRN: document.getElementById("crn").value,
+          CourseName: document.getElementById("courseName").value,
+          Credits: parseInt(document.getElementById("credits").value),
+        };
+      } else if (selectedType === "Department") {
+        data = {
+          DepartmentID: parseInt(document.getElementById("departmentID").value),
+          DepartmentName: document.getElementById("departmentName").value,
+        };
+      }
+      
+      // Wrap the data under the selected entity type key.
+      const payload = {};
+      payload[selectedType] = data;
+      
+      try {
+        const response = await fetch("http://localhost:3000/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const result = await response.json();
+        messageDiv.textContent = result.message || "Data inserted successfully.";
+      } catch (err) {
+        console.error("Error:", err);
+        messageDiv.textContent = "An error occurred.";
+      }
+    });
+  </script>
+</body>
+</html>
