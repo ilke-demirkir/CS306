@@ -2,20 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Insert Data</title>
+  <title>Insert Data into Database</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 40px; }
-    label { display: block; margin-top: 10px; }
-    input, select { padding: 6px; width: 300px; }
-    button { margin-top: 15px; padding: 8px 12px; }
-    .form-section { display: none; margin-top: 20px; }
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    label { display: block; margin-top: 8px; }
+    input, select { padding: 5px; margin: 4px 0; width: 300px; }
+    button { padding: 8px 12px; margin-top: 10px; }
+    .form-section { display: none; border: 1px solid #ccc; padding: 15px; margin-top: 15px; }
+    .form-section h2 { margin-top: 0; }
     #message { margin-top: 20px; font-weight: bold; }
   </style>
 </head>
 <body>
-  <h1>Insert Data</h1>
+  <h1>Insert Data into Database</h1>
   
-  <!-- Select the type of object -->
+  <!-- Dropdown for entity type -->
   <label for="entityType">Select Entity Type:</label>
   <select id="entityType">
     <option value="">--Select an Entity--</option>
@@ -23,125 +24,455 @@
     <option value="Dorm">Dorm</option>
     <option value="Course">Course</option>
     <option value="Department">Department</option>
-    <!-- Add more options here as needed -->
+    <option value="ProfessorOffice">ProfessorOffice</option>
+    <option value="Faculty">Faculty</option>
+    <option value="Professors">Professors</option>
+    <option value="Newsletter">Newsletter</option>
+    <option value="Publications">Publications</option>
+    <option value="Seminars">Seminars</option>
+    <option value="Enroll">Enroll</option>
+    <option value="Recitations">Recitations</option>
+    <option value="Prerequisites">Prerequisites</option>
+    <option value="CoursePrerequisites">CoursePrerequisites</option>
+    <option value="Deliver">Deliver</option>
+    <option value="Live">Live</option>
+    <option value="Enrolled_in">Enrolled_in</option>
+    <option value="Teach">Teach</option>
+    <option value="Enrolled">Enrolled</option>
+    <option value="Publish">Publish</option>
+    <option value="Write">Write</option>
+    <option value="Prereq">Prereq</option>
   </select>
   
   <!-- Student Form -->
   <div id="StudentForm" class="form-section">
     <h2>Insert Student</h2>
     <label for="studentID">Student ID:</label>
-    <input type="number" id="studentID" name="StudentID" required>
-    
+    <input type="number" id="studentID" name="StudentID">
     <label for="firstname">First Name:</label>
-    <input type="text" id="firstname" name="Firstname" required>
-    
+    <input type="text" id="firstname" name="Firstname">
     <label for="surname">Surname:</label>
-    <input type="text" id="surname" name="Surname" required>
-    
+    <input type="text" id="surname" name="Surname">
     <label for="dob">Date of Birth:</label>
-    <input type="date" id="dob" name="DateOfBirth" required>
-    
+    <input type="date" id="dob" name="DateOfBirth">
     <label for="email">Email:</label>
-    <input type="email" id="email" name="Email" required>
+    <input type="email" id="email" name="Email">
   </div>
   
   <!-- Dorm Form -->
   <div id="DormForm" class="form-section">
     <h2>Insert Dorm</h2>
     <label for="roomID">Room ID:</label>
-    <input type="number" id="roomID" name="RoomID" required>
-    
+    <input type="number" id="roomID" name="RoomID">
     <label for="building">Building:</label>
-    <input type="text" id="building" name="Building" required>
-    
+    <input type="text" id="building" name="Building">
     <label for="room">Room:</label>
-    <input type="text" id="room" name="Room" required>
+    <input type="text" id="room" name="Room">
   </div>
   
   <!-- Course Form -->
   <div id="CourseForm" class="form-section">
     <h2>Insert Course</h2>
     <label for="crn">CRN:</label>
-    <input type="text" id="crn" name="CRN" required>
-    
+    <input type="text" id="crn" name="CRN">
     <label for="courseName">Course Name:</label>
-    <input type="text" id="courseName" name="CourseName" required>
-    
+    <input type="text" id="courseName" name="CourseName">
     <label for="credits">Credits:</label>
-    <input type="number" id="credits" name="Credits" required>
+    <input type="number" id="credits" name="Credits">
   </div>
   
-  <!-- Department Form -->
+  <!-- Department Form  -->
   <div id="DepartmentForm" class="form-section">
     <h2>Insert Department</h2>
     <label for="departmentID">Department ID:</label>
-    <input type="number" id="departmentID" name="DepartmentID" required>
-    
+    <input type="number" id="departmentID" name="DepartmentID">
     <label for="departmentName">Department Name:</label>
-    <input type="text" id="departmentName" name="DepartmentName" required>
+    <input type="text" id="departmentName" name="DepartmentName">
   </div>
   
-  <!-- Button to submit the selected form -->
-  <button id="submitBtn" style="display: none;">Insert Data</button>
+  <!-- ProfessorOffice Form -->
+  <div id="ProfessorOfficeForm" class="form-section">
+    <h2>Insert ProfessorOffice</h2>
+    <label for="officeID">Office ID:</label>
+    <input type="number" id="officeID" name="OfficeID">
+    <label for="faculty">Faculty:</label>
+    <input type="text" id="faculty" name="Faculty">
+  </div>
+  
+  <!-- Faculty Form -->
+  <div id="FacultyForm" class="form-section">
+    <h2>Insert Faculty</h2>
+    <label for="facultyID">Faculty ID:</label>
+    <input type="number" id="facultyID" name="FacultyID">
+    <label for="facultyName">Faculty Name:</label>
+    <input type="text" id="facultyName" name="Faculty_Name">
+  </div>
+  
+  <!-- Professors Form -->
+  <div id="ProfessorsForm" class="form-section">
+    <h2>Insert Professors</h2>
+    <label for="profid">Professor ID:</label>
+    <input type="number" id="profid" name="profid">
+    <label for="profName">Name (First and Last):</label>
+    <input type="text" id="profName" name="first_and_last_name">
+    <label for="profFacultyID">Faculty ID:</label>
+    <input type="number" id="profFacultyID" name="FacultyID">
+    <label for="profOfficeID">Office ID:</label>
+    <input type="number" id="profOfficeID" name="OfficeID">
+  </div>
+  
+  <!-- Newsletter Form -->
+  <div id="NewsletterForm" class="form-section">
+    <h2>Insert Newsletter</h2>
+    <label for="newsletterID">Newsletter ID:</label>
+    <input type="number" id="newsletterID" name="NewsletterID">
+    <label for="newsletterName">Newsletter Name:</label>
+    <input type="text" id="newsletterName" name="NewsletterName">
+    <label for="publishDateNL">Publish Date:</label>
+    <input type="date" id="publishDateNL" name="PublishDate">
+  </div>
+  
+  <!-- Publications Form -->
+  <div id="PublicationsForm" class="form-section">
+    <h2>Insert Publications</h2>
+    <label for="publicationID">Publication ID:</label>
+    <input type="number" id="publicationID" name="PublicationID">
+    <label for="publicationName">Publication Name:</label>
+    <input type="text" id="publicationName" name="PublicationName">
+    <label for="pubAuthor">Author:</label>
+    <input type="text" id="pubAuthor" name="Author">
+    <label for="publishDatePub">Publish Date:</label>
+    <input type="date" id="publishDatePub" name="PublishDate">
+  </div>
+  
+  <!-- Seminars Form -->
+  <div id="SeminarsForm" class="form-section">
+    <h2>Insert Seminars</h2>
+    <label for="seminarID">Seminar ID:</label>
+    <input type="number" id="seminarID" name="SeminarID">
+    <label for="seminarName">Seminar Name:</label>
+    <input type="text" id="seminarName" name="SeminarName">
+    <label for="seminarAuthor">Author:</label>
+    <input type="text" id="seminarAuthor" name="Author">
+    <label for="publishDateSem">Publish Date:</label>
+    <input type="date" id="publishDateSem" name="PublishDate">
+  </div>
+  
+  <!-- Enroll Form -->
+  <div id="EnrollForm" class="form-section">
+    <h2>Insert Enroll</h2>
+    <label for="enrollStudentID">Student ID:</label>
+    <input type="number" id="enrollStudentID" name="StudentID">
+    <label for="enrollDepartmentID">Department ID:</label>
+    <input type="number" id="enrollDepartmentID" name="DepartmentID">
+    <label for="sinceEnroll">Since:</label>
+    <input type="date" id="sinceEnroll" name="Since">
+  </div>
+  
+  <!-- Recitations Form -->
+  <div id="RecitationsForm" class="form-section">
+    <h2>Insert Recitations</h2>
+    <label for="recitationID">Recitation ID:</label>
+    <input type="number" id="recitationID" name="RecitationID">
+    <label for="recCRN">CRN:</label>
+    <input type="text" id="recCRN" name="CRN">
+    <label for="sectionRec">Section:</label>
+    <input type="text" id="sectionRec" name="Section">
+  </div>
+  
+  <!-- Prerequisites Form -->
+  <div id="PrerequisitesForm" class="form-section">
+    <h2>Insert Prerequisites</h2>
+    <label for="prerequisiteID">Prerequisite ID:</label>
+    <input type="number" id="prerequisiteID" name="prerequisiteID">
+    <label for="creditPrereq">Credit:</label>
+    <input type="number" id="creditPrereq" name="Credit">
+  </div>
+  
+  <!-- CoursePrerequisites Form -->
+  <div id="CoursePrerequisitesForm" class="form-section">
+    <h2>Insert CoursePrerequisites</h2>
+    <label for="coursePrerequisitesID">CoursePrerequisites ID:</label>
+    <input type="number" id="coursePrerequisitesID" name="coursePrerequisitesID">
+    <label for="cpCRN">CRN:</label>
+    <input type="text" id="cpCRN" name="CRN">
+    <label for="cpCourseName">Course Name:</label>
+    <input type="text" id="cpCourseName" name="Course_Name">
+  </div>
+  
+  <!-- Deliver Form -->
+  <div id="DeliverForm" class="form-section">
+    <h2>Insert Deliver</h2>
+    <label for="deliverSeminarID">Seminar ID:</label>
+    <input type="number" id="deliverSeminarID" name="SeminarID">
+    <label for="deliverDepartmentID">Department ID:</label>
+    <input type="number" id="deliverDepartmentID" name="DepartmentID">
+    <label for="deliverPublishDate">Publish Date:</label>
+    <input type="date" id="deliverPublishDate" name="PublishDate">
+  </div>
+  
+  <!-- Live Form -->
+  <div id="LiveForm" class="form-section">
+    <h2>Insert Live</h2>
+    <label for="liveStudentID">Student ID:</label>
+    <input type="number" id="liveStudentID" name="StudentID">
+    <label for="liveRoomID">Room ID:</label>
+    <input type="number" id="liveRoomID" name="RoomID">
+  </div>
+  
+  <!-- Enrolled_in Form -->
+  <div id="Enrolled_inForm" class="form-section">
+    <h2>Insert Enrolled_in</h2>
+    <label for="eiStudentID">Student ID:</label>
+    <input type="number" id="eiStudentID" name="StudentID">
+    <label for="eiCRN">CRN:</label>
+    <input type="text" id="eiCRN" name="CRN">
+  </div>
+  
+  <!-- Teach Form -->
+  <div id="TeachForm" class="form-section">
+    <h2>Insert Teach</h2>
+    <label for="teachProfid">Professor ID:</label>
+    <input type="number" id="teachProfid" name="profid">
+    <label for="teachCRN">CRN:</label>
+    <input type="text" id="teachCRN" name="CRN">
+  </div>
+  
+  <!-- Enrolled Form -->
+  <div id="EnrolledForm" class="form-section">
+    <h2>Insert Enrolled</h2>
+    <label for="enrolmentid">Enrolment ID:</label>
+    <input type="number" id="enrolmentid" name="enrolmentid">
+    <label for="enrolledStudentID">Student ID:</label>
+    <input type="number" id="enrolledStudentID" name="StudentID">
+    <label for="enrolledDepartmentID">Department ID:</label>
+    <input type="number" id="enrolledDepartmentID" name="DepartmentID">
+    <label for="sinceEnrolled">Since:</label>
+    <input type="date" id="sinceEnrolled" name="since">
+  </div>
+  
+  <!-- Publish Form -->
+  <div id="PublishForm" class="form-section">
+    <h2>Insert Publish</h2>
+    <label for="publishPublicationID">Publication ID:</label>
+    <input type="number" id="publishPublicationID" name="PublicationID">
+    <label for="publishFacultyID">Faculty ID:</label>
+    <input type="number" id="publishFacultyID" name="FacultyID">
+  </div>
+  
+  <!-- Write Form -->
+  <div id="WriteForm" class="form-section">
+    <h2>Insert Write</h2>
+    <label for="writeDepartmentID">Department ID:</label>
+    <input type="number" id="writeDepartmentID" name="DepartmentID">
+    <label for="writePublicationID">Publication ID:</label>
+    <input type="number" id="writePublicationID" name="PublicationID">
+  </div>
+  
+  <!-- Prereq Form -->
+  <div id="PrereqForm" class="form-section">
+    <h2>Insert Prereq</h2>
+    <label for="prereqPrerequisiteID">Prerequisite ID:</label>
+    <input type="number" id="prereqPrerequisiteID" name="prerequisiteID">
+    <label for="prereqCRN">CRN:</label>
+    <input type="text" id="prereqCRN" name="CRN">
+    <label for="prereqCoursePrerequisitesID">CoursePrerequisites ID:</label>
+    <input type="number" id="prereqCoursePrerequisitesID" name="coursePrerequisitesID">
+  </div>
+  
+  <!-- Submit Button -->
+  <button id="submitBtn" style="display:none;">Insert Data</button>
   
   <div id="message"></div>
   
   <script>
-    const entityTypeSelect = document.getElementById('entityType');
-    const submitBtn = document.getElementById('submitBtn');
-    const messageDiv = document.getElementById('message');
-    const formSections = document.querySelectorAll('.form-section');
-
-    // Hide all form sections initially.
-    formSections.forEach(section => section.style.display = 'none');
+    // Show/hide the correct form section based on selection.
+    const entityTypeSelect = document.getElementById("entityType");
+    const submitBtn = document.getElementById("submitBtn");
+    const messageDiv = document.getElementById("message");
+    const formSections = document.querySelectorAll(".form-section");
     
-    // Show the corresponding form when an entity type is selected.
-    entityTypeSelect.addEventListener('change', function() {
-      formSections.forEach(section => section.style.display = 'none');
+    formSections.forEach(section => section.style.display = "none");
+    
+    entityTypeSelect.addEventListener("change", () => {
+      formSections.forEach(section => section.style.display = "none");
       messageDiv.textContent = "";
       
       const selectedType = entityTypeSelect.value;
       if (selectedType) {
-        document.getElementById(selectedType + 'Form').style.display = 'block';
-        submitBtn.style.display = 'block';
+        const formSection = document.getElementById(selectedType + "Form");
+        if (formSection) {
+          formSection.style.display = "block";
+          submitBtn.style.display = "block";
+        } else {
+          submitBtn.style.display = "none";
+        }
       } else {
-        submitBtn.style.display = 'none';
+        submitBtn.style.display = "none";
       }
     });
     
-    // Submit the form data.
-    submitBtn.addEventListener('click', async function() {
+    submitBtn.addEventListener("click", async () => {
       const selectedType = entityTypeSelect.value;
       let data = {};
       
-      if (selectedType === "Student") {
-        data = {
-          StudentID: parseInt(document.getElementById("studentID").value),
-          Firstname: document.getElementById("firstname").value,
-          Surname: document.getElementById("surname").value,
-          DateOfBirth: document.getElementById("dob").value,
-          Email: document.getElementById("email").value,
-        };
-      } else if (selectedType === "Dorm") {
-        data = {
-          RoomID: parseInt(document.getElementById("roomID").value),
-          Building: document.getElementById("building").value,
-          Room: document.getElementById("room").value,
-        };
-      } else if (selectedType === "Course") {
-        data = {
-          CRN: document.getElementById("crn").value,
-          CourseName: document.getElementById("courseName").value,
-          Credits: parseInt(document.getElementById("credits").value),
-        };
-      } else if (selectedType === "Department") {
-        data = {
-          DepartmentID: parseInt(document.getElementById("departmentID").value),
-          DepartmentName: document.getElementById("departmentName").value,
-        };
+      // Create a switch-case to gather values from the appropriate form.
+      switch(selectedType) {
+        case "Student":
+          data = {
+            StudentID: parseInt(document.getElementById("studentID").value),
+            Firstname: document.getElementById("firstname").value,
+            Surname: document.getElementById("surname").value,
+            DateOfBirth: document.getElementById("dob").value,
+            Email: document.getElementById("email").value
+          };
+          break;
+        case "Dorm":
+          data = {
+            RoomID: parseInt(document.getElementById("roomID").value),
+            Building: document.getElementById("building").value,
+            Room: document.getElementById("room").value
+          };
+          break;
+        case "Course":
+          data = {
+            CRN: document.getElementById("crn").value,
+            CourseName: document.getElementById("courseName").value,
+            Credits: parseInt(document.getElementById("credits").value)
+          };
+          break;
+        case "Department":
+          data = {
+            DepartmentID: parseInt(document.getElementById("departmentID").value),
+            DepartmentName: document.getElementById("departmentName").value
+          };
+          break;
+        case "ProfessorOffice":
+          data = {
+            OfficeID: parseInt(document.getElementById("officeID").value),
+            Faculty: document.getElementById("faculty").value
+          };
+          break;
+        case "Faculty":
+          data = {
+            FacultyID: parseInt(document.getElementById("facultyID").value),
+            Faculty_Name: document.getElementById("facultyName").value
+          };
+          break;
+        case "Professors":
+          data = {
+            profid: parseInt(document.getElementById("profid").value),
+            first_and_last_name: document.getElementById("profName").value,
+            FacultyID: parseInt(document.getElementById("profFacultyID").value),
+            OfficeID: parseInt(document.getElementById("profOfficeID").value)
+          };
+          break;
+        case "Newsletter":
+          data = {
+            NewsletterID: parseInt(document.getElementById("newsletterID").value),
+            NewsletterName: document.getElementById("newsletterName").value,
+            PublishDate: document.getElementById("publishDateNL").value
+          };
+          break;
+        case "Publications":
+          data = {
+            PublicationID: parseInt(document.getElementById("publicationID").value),
+            PublicationName: document.getElementById("publicationName").value,
+            Author: document.getElementById("pubAuthor").value,
+            PublishDate: document.getElementById("publishDatePub").value
+          };
+          break;
+        case "Seminars":
+          data = {
+            SeminarID: parseInt(document.getElementById("seminarID").value),
+            SeminarName: document.getElementById("seminarName").value,
+            Author: document.getElementById("seminarAuthor").value,
+            PublishDate: document.getElementById("publishDateSem").value
+          };
+          break;
+        case "Enroll":
+          data = {
+            StudentID: parseInt(document.getElementById("enrollStudentID").value),
+            DepartmentID: parseInt(document.getElementById("enrollDepartmentID").value),
+            Since: document.getElementById("sinceEnroll").value
+          };
+          break;
+        case "Recitations":
+          data = {
+            RecitationID: parseInt(document.getElementById("recitationID").value),
+            CRN: document.getElementById("recCRN").value,
+            Section: document.getElementById("sectionRec").value
+          };
+          break;
+        case "Prerequisites":
+          data = {
+            prerequisiteID: parseInt(document.getElementById("prerequisiteID").value),
+            Credit: parseInt(document.getElementById("creditPrereq").value)
+          };
+          break;
+        case "CoursePrerequisites":
+          data = {
+            coursePrerequisitesID: parseInt(document.getElementById("coursePrerequisitesID").value),
+            CRN: document.getElementById("cpCRN").value,
+            Course_Name: document.getElementById("cpCourseName").value
+          };
+          break;
+        case "Deliver":
+          data = {
+            SeminarID: parseInt(document.getElementById("deliverSeminarID").value),
+            DepartmentID: parseInt(document.getElementById("deliverDepartmentID").value),
+            PublishDate: document.getElementById("deliverPublishDate").value
+          };
+          break;
+        case "Live":
+          data = {
+            StudentID: parseInt(document.getElementById("liveStudentID").value),
+            RoomID: parseInt(document.getElementById("liveRoomID").value)
+          };
+          break;
+        case "Enrolled_in":
+          data = {
+            StudentID: parseInt(document.getElementById("eiStudentID").value),
+            CRN: document.getElementById("eiCRN").value
+          };
+          break;
+        case "Teach":
+          data = {
+            profid: parseInt(document.getElementById("teachProfid").value),
+            CRN: document.getElementById("teachCRN").value
+          };
+          break;
+        case "Enrolled":
+          data = {
+            enrolmentid: parseInt(document.getElementById("enrolmentid").value),
+            StudentID: parseInt(document.getElementById("enrolledStudentID").value),
+            DepartmentID: parseInt(document.getElementById("enrolledDepartmentID").value),
+            since: document.getElementById("sinceEnrolled").value
+          };
+          break;
+        case "Publish":
+          data = {
+            PublicationID: parseInt(document.getElementById("publishPublicationID").value),
+            FacultyID: parseInt(document.getElementById("publishFacultyID").value)
+          };
+          break;
+        case "Write":
+          data = {
+            DepartmentID: parseInt(document.getElementById("writeDepartmentID").value),
+            PublicationID: parseInt(document.getElementById("writePublicationID").value)
+          };
+          break;
+        case "Prereq":
+          data = {
+            prerequisiteID: parseInt(document.getElementById("prereqPrerequisiteID").value),
+            CRN: document.getElementById("prereqCRN").value,
+            coursePrerequisitesID: parseInt(document.getElementById("prereqCoursePrerequisitesID").value)
+          };
+          break;
+        default:
+          data = {};
       }
       
-      // Wrap the data under the selected entity type key.
       const payload = {};
       payload[selectedType] = data;
       

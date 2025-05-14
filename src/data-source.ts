@@ -7,7 +7,7 @@ export const AppDataSource = new DataSource({
   port: 3306,
   username: "root", 
   password: "Antalya04", 
-  database: "CS306", 
+  database: "project", 
   extra: {
     multipleStatements: true,
   },
