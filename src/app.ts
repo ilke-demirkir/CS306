@@ -30,12 +30,12 @@ async function initializeDatabase() {
 
 app.post('/tickets', async (req: Request, res: Response): Promise<void> => {
   try {
-    const { title, description } = req.body;
-    if (!title || !description) {
+    const { username, message } = req.body;
+    if (!username || !message) {
       res.status(400).json({ error: 'title and description are required' });
       return;
     }
-    const ticket = new Ticket({ title, description });
+    const ticket = new Ticket({ username, message });
     await ticket.save();
 
     res.status(201).json(ticket);
@@ -80,6 +80,23 @@ app.post('/tickets/:id/comments', async (req, res):Promise<void> => {
   res.json(ticket);
 });
 
+// Close (or reopen) a ticket
+app.patch('/tickets/:id', async (req: Request, res: Response):Promise<void> => {
+  try {
+    const ticket = await Ticket.findById(req.params.id);
+    if (!ticket) {
+      res.status(404).json({ error: 'Not found' });
+      return;
+    }
+    // Toggle or explicitly close:
+    ticket.status = 'closed';
+    await ticket.save();
+    res.json(ticket);
+  } catch (err: any) {
+    console.error('Error closing ticket:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 app.use(express.static(path.join(__dirname, '../public')));
 
@@ -400,11 +417,11 @@ app.get(
 // Trigger: prof_faculty_limit
 // Prevents a professor from working in more than one faculty.
 // Usage:
-//   GET /trigger/prof-faculty-limit?test=A  → assign professor once (should succeed)
-//   GET /trigger/prof-faculty-limit?test=B  → assign professor twice (should fail)
+//   GET /trigger/stu-faculty-limit?test=A  → assign student once (should succeed)
+//   GET /trigger/stu-faculty-limit?test=B  → assign student twice (should fail)
 
 app.get(
-  "/trigger/prof-faculty-limit",
+  "/trigger/stu-faculty-limit",
   async (req: Request, res: Response) => {
     const test = req.query.test as string | undefined;
     let output = "";

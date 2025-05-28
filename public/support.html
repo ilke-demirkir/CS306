@@ -51,7 +51,9 @@
       ticketItems.innerHTML = '';
       const username = userSelect.value;
       if (!username) return ticketItems.textContent = 'Select a user.';
-      const tickets = allTickets.filter(t => t.username === username);
+      const tickets = allTickets.filter(
+        t => t.username === username && t.status === true
+      );
       if (tickets.length === 0) {
         return ticketItems.textContent = 'No active tickets.';
       }

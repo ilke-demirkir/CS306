@@ -41,7 +41,7 @@
       }
 
       try {
-        const res = await fetch('/support/create', {
+        const res = await fetch('/tickets', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username, message })

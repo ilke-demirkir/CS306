@@ -1,29 +1,33 @@
 // STORED IN MongoDB
 import { Schema, model, Document } from 'mongoose';
+export interface IComment{
+  text: string;
+  date: Date;
+}
 
 export interface ITicket extends Document {
-  title: string;
-  description: string;
+  username: string;
+  message: string;
   createdAt: Date;
-  comments: [
-    {
-      text: String,
-      date: Date,
-    }
-  ];
+  comments: IComment[];
   status: 'open' | 'closed' | 'pending';
 }
 
+const CommentSchema = new Schema<IComment>({
+  text:   { type: String, required: true },
+  date:   { type: Date,   required: true },
+});
+
 const ticketSchema = new Schema<ITicket>({
-  title: { type: String, required: true },
-  description: { type: String, required: true },
-  comments: {},
+  username: { type: String, required: true },
+  message: { type: String, required: true },
+  comments: {type: [CommentSchema], default: []},
   status: {
     type: String,
     enum: ['open', 'closed', 'pending'],
     default: 'open',
   },
-  createdAt: { type: Date, default: () => new Date() },
+  createdAt: { type: Date, default: Date.now },
 });
 
 export const Ticket = model<ITicket>('Ticket', ticketSchema);

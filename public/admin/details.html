@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin • Ticket Detail</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    nav a { text-decoration: none; color: #0066cc; }
+    .field { margin-top: 8px; }
+    #comments { margin-top: 16px; }
+    .comment { border-top: 1px solid #ddd; padding: 8px 0; }
+    textarea, button { width: 400px; padding: 6px; margin-top: 6px; }
+    .closed { color: red; font-weight: bold; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <nav><a href="index.html">← Back to All Tickets</a></nav>
+  <h1>Ticket Detail (Admin)</h1>
+  
+  <div class="field"><strong>ID:</strong> <span id="ticketId"></span></div>
+  <div class="field"><strong>User:</strong> <span id="ticketUser"></span></div>
+  <div class="field"><strong>Created:</strong> <span id="ticketDate"></span></div>
+  <div class="field"><strong>Message:</strong>
+    <div id="ticketBody" style="margin-left:10px;"></div>
+  </div>
+  <div class="field">
+    <strong>Status:</strong>
+    <span id="ticketStatus"></span>
+  </div>
+  
+  <button id="closeBtn" style="margin-top:12px;">Close Ticket</button>
+  <div id="closeMsg" style="margin-top:8px;color:red;"></div>
+  
+  <h2>Comments</h2>
+  <div id="comments"></div>
+  
+  <h3>Add Comment</h3>
+  <textarea id="newComment" rows="3" placeholder="Admin comment…"></textarea><br>
+  <button id="submitComment">Submit Comment</button>
+  <div id="commentMsg" style="margin-top:8px;color:green;"></div>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const id = params.get('id');
+    const fields = {
+      id: document.getElementById('ticketId'),
+      user: document.getElementById('ticketUser'),
+      date: document.getElementById('ticketDate'),
+      body: document.getElementById('ticketBody'),
+      status: document.getElementById('ticketStatus'),
+      comments: document.getElementById('comments'),
+      closeMsg: document.getElementById('closeMsg'),
+      commentMsg: document.getElementById('commentMsg')
+    };
+    const closeBtn = document.getElementById('closeBtn');
+    const submitComment = document.getElementById('submitComment');
+    const newCommentField = document.getElementById('newComment');
+
+    async function loadTicket() {
+      const res = await fetch(`/tickets/${id}`);
+      if (!res.ok) {
+        alert('Ticket not found');
+        return;
+      }
+      const t = await res.json();
+      // Populate fields
+      fields.id.textContent = t._id;
+      fields.user.textContent = t.username;
+      fields.date.textContent = new Date(t.createdAt).toLocaleString();
+      fields.body.textContent = t.message;
+      fields.status.textContent = t.status ? 'Open' : 'Closed';
+      fields.status.className = t.status ? '' : 'closed';
+      
+      // Enable/disable actions based on status
+      if (!t.status) {
+        closeBtn.disabled = true;
+        closeBtn.classList.add('hidden');
+        newCommentField.disabled = true;
+        submitComment.disabled = true;
+      } else {
+        closeBtn.disabled = false;
+        closeBtn.classList.remove('hidden');
+        newCommentField.disabled = false;
+        submitComment.disabled = false;
+      }
+
+      // Render comments
+      fields.comments.innerHTML = '';
+      t.comments.forEach(c => {
+        const d = document.createElement('div');
+        d.className = 'comment';
+        d.textContent = `${new Date(c.date).toLocaleString()}: ${c.text}`;
+        fields.comments.appendChild(d);
+      });
+    }
+    
+    closeBtn.addEventListener('click', async () => {
+        fields.closeMsg.textContent = '';
+        try {
+            const res = await fetch(`/tickets/${id}`, { method: 'PATCH' });
+            console.log('PATCH /tickets/' + id, res.status, await res.text());
+            if (res.ok) {
+                fields.closeMsg.textContent = 'Ticket closed.';
+                await loadTicket();
+            } else {
+                fields.closeMsg.textContent = `Failed to close (HTTP ${res.status}). Check console.`;
+            }
+        } catch (e) {
+        console.error('Network or CORS error on PATCH:', e);
+        fields.closeMsg.textContent = 'Network error. See console.';
+        }
+    });
+    
+    submitComment.addEventListener('click', async () => {
+      fields.commentMsg.textContent = '';
+      const text = newCommentField.value.trim();
+      if (!text) {
+        fields.commentMsg.textContent = 'Comment required.';
+        return;
+      }
+      const res = await fetch(`/tickets/${id}/comments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text })
+      });
+      if (res.ok) {
+        fields.commentMsg.textContent = 'Comment added.';
+        newCommentField.value = '';
+        loadTicket();
+      } else {
+        fields.commentMsg.textContent = 'Failed to add comment.';
+      }
+    });
+    
+    loadTicket();
+  </script>
+</body>
+</html>
