@@ -21,6 +21,8 @@
   <!-- Trigger: check_dorm_limit -->
   <section id="section-check-dorm-limit">
     <h2>check_dorm_limit</h2>
+    <p>At most 2 students can live in a dorm. According to YÖK regulations, students may encourage each other to do bad things. Also, having more than 2 people in a room may cause some sanitation problems.
+</p>
     <button data-trigger="check-dorm-limit" data-test="A">Case A: Insert 2 occupants (should succeed)</button>
     <button data-trigger="check-dorm-limit" data-test="B">Case B: Insert 3rd occupant (should fail)</button>
     <pre id="result-check-dorm-limit"></pre>
@@ -29,6 +31,8 @@
   <!-- Trigger: check_department_limit -->
   <section id="section-check-department-limit">
     <h2>check_department_limit</h2>
+    <p>A student can be a member of at most 2 departments. This trigger prevents students from doing triple, quadruple, or more majors.
+</p>
     <button data-trigger="check-department-limit" data-test="A">Case A: Join 2 departments (should succeed)</button>
     <button data-trigger="check-department-limit" data-test="B">Case B: Join 3rd department (should fail)</button>
     <pre id="result-check-department-limit"></pre>
@@ -37,6 +41,8 @@
   <!-- Trigger: prof_course_limit -->
   <section id="section-prof-course-limit">
     <h2>prof_course_limit</h2>
+    <p>A professor can teach 2 courses at max. This trigger is especially important as it protects professors from mental and physical breakdown.
+</p>
     <button data-trigger="prof-course-limit" data-test="A">Case A: Teach 2 courses (should succeed)</button>
     <button data-trigger="prof-course-limit" data-test="B">Case B: Teach 3rd course (should fail)</button>
     <pre id="result-prof-course-limit"></pre>
@@ -45,17 +51,21 @@
   <!-- Trigger: prerequisite_limit -->
   <section id="section-prerequisite-limit">
     <h2>prerequisite_limit</h2>
+    <p>Limits the maximum number of prerequisites a course can have to 2. There are no courses in our university that require 3 prerequisites. There is probably a mistake in course crns if a course has 3 prerequisites. This trigger warns the user about that.
+</p>
     <button data-trigger="prerequisite-limit" data-test="A">Case A: Add 2 prereqs (should succeed)</button>
     <button data-trigger="prerequisite-limit" data-test="B">Case B: Add 3rd prereq (should fail)</button>
     <pre id="result-prerequisite-limit"></pre>
   </section>
 
-  <!-- Trigger: stu_faculty_limit -->
-  <section id="section-stu-faculty-limit">
-    <h2>stu_faculty_limit</h2>
-    <button data-trigger="stu-faculty-limit" data-test="A">Case A: Assign to one faculty (should succeed)</button>
-    <button data-trigger="stu-faculty-limit" data-test="B">Case B: Assign to second faculty (should fail)</button>
-    <pre id="result-stu-faculty-limit"></pre>
+  <!-- Trigger: prof_faculty_limit -->
+  <section id="section-prof-faculty-limit">
+    <h2>seminar_limit</h2>
+    <p>Each department can have a maximum of two seminars at the same time. If it tries to add a third one the trigger does not let it. 
+</p>
+    <button data-trigger="prof-faculty-limit" data-test="A">Case A: Assign to one faculty (should succeed)</button>
+    <button data-trigger="prof-faculty-limit" data-test="B">Case B: Assign to second faculty (should fail)</button>
+    <pre id="result-prof-faculty-limit"></pre>
   </section>
 
   <script>
