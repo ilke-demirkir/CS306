@@ -5,7 +5,8 @@ import { AppDataSource } from "./data-source";
 import { insertRecord } from "./services/insertHelper";
 import * as fs from "fs";
 import * as path from "path";
-
+import { connectDB } from "./db";
+import { Ticket, ITicket } from "./models/Ticket";
 const app = express();
 app.use(express.json());
 
@@ -23,6 +24,34 @@ async function initializeDatabase() {
     throw error;
   }
 }
+
+// Ticket services, ekstra bi dosya ile uğraşmak istemedim
+
+app.post('/tickets', async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { title, description } = req.body;
+    if (!title || !description) {
+      res.status(400).json({ error: 'title and description are required' });
+      return;
+    }
+    const ticket = new Ticket({ title, description });
+    await ticket.save();
+
+    res.status(201).json(ticket);
+    return;
+  } catch (err) {
+    console.error('Error creating ticket:', err);
+    res.status(500).json({ error: 'Internal server error' });
+    return;
+  }
+});
+
+// Example: GET /tickets to list all
+app.get('/tickets', async (_req, res) => {
+  const tickets = await Ticket.find().sort({ createdAt: -1 });
+  res.json(tickets);
+});
+
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "FE.html"));
   });
@@ -54,6 +83,8 @@ app.post("/", async (req: Request, res: Response): Promise<void> => {
 AppDataSource.initialize()
   .then(async () => {
     await initializeDatabase();
+    
+    await connectDB();
     
     app.listen(3000, () => {
       console.log("Server is running on port 3000");

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Support • Ticket Details</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    nav a { margin-right: 12px; }
+    .field { margin-top: 8px; }
+    #comments { margin-top: 16px; }
+    .comment { border-top: 1px solid #ddd; padding: 8px 0; }
+    textarea, button { width: 300px; padding: 6px; margin-top: 6px; }
+    #newCommentSection { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/support">Back to Ticket List</a>
+  </nav>
+
+  <h1>Ticket Details</h1>
+
+  <div class="field"><strong>ID:</strong> <span id="ticketId"></span></div>
+  <div class="field"><strong>User:</strong> <span id="ticketUser"></span></div>
+  <div class="field"><strong>Created:</strong> <span id="ticketDate"></span></div>
+  <div class="field"><strong>Message:</strong><div id="ticketBody" style="margin-left:10px;"></div></div>
+  <div class="field"><strong>Status:</strong> <span id="ticketStatus"></span></div>
+
+  <h2>Comments</h2>
+  <div id="comments"></div>
+
+  <div id="newCommentSection">
+    <h3>Add Comment</h3>
+    <textarea id="newComment" rows="3" placeholder="Your comment…"></textarea><br>
+    <button id="submitComment">Submit Comment</button>
+    <div id="commentMsg" style="margin-top:8px; font-weight:bold;"></div>
+  </div>
+
+  <script>
+    const ticketId = location.pathname.split('/').pop();
+    const fields = {
+      id: document.getElementById('ticketId'),
+      user: document.getElementById('ticketUser'),
+      date: document.getElementById('ticketDate'),
+      body: document.getElementById('ticketBody'),
+      status: document.getElementById('ticketStatus'),
+      comments: document.getElementById('comments'),
+      commentMsg: document.getElementById('commentMsg')
+    };
+
+    // Load ticket details
+    async function loadTicket() {
+      const res = await fetch(`/support/${ticketId}`);
+      const t = await res.json();
+      fields.id.textContent = t._id;
+      fields.user.textContent = t.username;
+      fields.date.textContent = new Date(t.createdAt).toLocaleString();
+      fields.body.textContent = t.message;
+      fields.status.textContent = t.status ? 'Open' : 'Closed';
+
+      // render comments
+      fields.comments.innerHTML = '';
+      t.comments.forEach(c => {
+        const div = document.createElement('div');
+        div.className = 'comment';
+        div.textContent = `${new Date(c.date).toLocaleString()}: ${c.text}`;
+        fields.comments.appendChild(div);
+      });
+    }
+
+    // Submit a new comment
+    document.getElementById('submitComment').addEventListener('click', async () => {
+      const text = document.getElementById('newComment').value.trim();
+      fields.commentMsg.textContent = '';
+      if (!text) {
+        fields.commentMsg.textContent = 'Comment cannot be empty.';
+        return;
+      }
+
+      try {
+        const res = await fetch(`/support/${ticketId}/comments`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text })
+        });
+        if (res.ok) {
+          document.getElementById('newComment').value = '';
+          loadTicket();  // refresh comments
+        } else {
+          const err = await res.json();
+          fields.commentMsg.textContent = err.error || 'Could not add.';
+        }
+      } catch {
+        fields.commentMsg.textContent = 'Network error.';
+      }
+    });
+
+    // initial fetch
+    loadTicket();
+  </script>
+</body>
+</html>

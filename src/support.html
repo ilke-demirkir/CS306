@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Support • Your Tickets</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    label, select { display: block; margin-top: 12px; }
+    select, button { padding: 6px; margin-top: 6px; }
+    #ticketItems { margin-top: 20px; }
+    .ticket { border: 1px solid #ccc; padding: 12px; margin-bottom: 10px; }
+    .ticket a { text-decoration: none; color: #0066cc; }
+    nav a { margin-right: 12px; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/user">Home</a>
+  </nav>
+  <h1>Your Active Tickets</h1>
+
+  <label for="usernameSelect">Select Username:</label>
+  <select id="usernameSelect">
+    <option value="">-- choose --</option>
+  </select>
+
+  <div id="ticketItems">
+    <!-- populated dynamically -->
+  </div>
+
+  <a href="/support/create"><button>Create New Ticket</button></a>
+
+  <script>
+    const userSelect = document.getElementById('usernameSelect');
+    const ticketItems = document.getElementById('ticketItems');
+
+    // 1) Load users who have tickets
+    async function loadUsers() {
+      const res = await fetch('/support/users');
+      const { users } = await res.json();
+      users.forEach(u => {
+        const opt = document.createElement('option');
+        opt.value = u;
+        opt.textContent = u;
+        userSelect.appendChild(opt);
+      });
+    }
+
+    // 2) When a user is selected, load their tickets
+    userSelect.addEventListener('change', async () => {
+      ticketItems.innerHTML = '';
+      const username = userSelect.value;
+      if (!username) return;
+      const res = await fetch(`/support?username=${encodeURIComponent(username)}`);
+      const { tickets } = await res.json();
+      if (tickets.length === 0) {
+        ticketItems.textContent = 'No active tickets.';
+        return;
+      }
+      tickets.forEach(t => {
+        const div = document.createElement('div');
+        div.className = 'ticket';
+        div.innerHTML = `
+          <strong>#${t._id}</strong> • ${new Date(t.createdAt).toLocaleString()}<br>
+          ${t.message}<br>
+          <a href="/support/${t._id}">View Details →</a>
+        `;
+        ticketItems.appendChild(div);
+      });
+    });
+
+    // initial load
+    loadUsers();
+  </script>
+</body>
+</html>

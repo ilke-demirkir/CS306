@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Support • Create Ticket</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    nav a { margin-right: 12px; }
+    label { display: block; margin-top: 12px; }
+    input, textarea, button { width: 300px; padding: 6px; margin-top: 6px; }
+    #message { margin-top: 20px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/user">Home</a> |
+    <a href="/support">Back to Ticket List</a>
+  </nav>
+
+  <h1>Open a Ticket</h1>
+
+  <label for="ticketUsername">Username:</label>
+  <input type="text" id="ticketUsername" name="username" placeholder="your username">
+
+  <label for="ticketMessage">Message:</label>
+  <textarea id="ticketMessage" name="message" rows="4"></textarea>
+
+  <button id="submitTicket">Submit Ticket</button>
+  <div id="message"></div>
+
+  <script>
+    document.getElementById('submitTicket').addEventListener('click', async () => {
+      const username = document.getElementById('ticketUsername').value.trim();
+      const message = document.getElementById('ticketMessage').value.trim();
+      const msgDiv = document.getElementById('message');
+      msgDiv.textContent = '';
+
+      if (!username || !message) {
+        msgDiv.textContent = 'Username and message are both required.';
+        return;
+      }
+
+      try {
+        const res = await fetch('/support/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, message })
+        });
+        const body = await res.json();
+        if (res.ok) {
+          msgDiv.textContent = `Ticket created! ID: ${body._id}`;
+        } else {
+          msgDiv.textContent = `Error: ${body.error || 'Could not create.'}`;
+        }
+      } catch (err) {
+        msgDiv.textContent = 'Network error.';
+      }
+    });
+  </script>
+</body>
+</html>
