@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Department Enrollment Birth Rank</title>
+  <style>/* same styling */</style>
+</head>
+<body>
+  <a href="/">← Back to Home</a>
+  <h1>First N Students by Enrollment Date</h1>
+  <p>Enter a department ID and N to list the first N enrolled students.</p>
+  <form id="rankForm">
+    <label for="depId">Department ID:</label>
+    <input type="number" id="depId" name="dep_id" required>
+    <label for="countN">N (number of students):</label>
+    <input type="number" id="countN" name="n" min="1" required>
+    <button type="submit">Fetch List</button>
+  </form>
+  <pre id="result"></pre>
+
+  <script>
+    document.getElementById('rankForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const depId = document.getElementById('depId').value;
+      const n     = document.getElementById('countN').value;
+      const res   = await fetch(`/proc/dep-birth-rank?dep_id=${encodeURIComponent(depId)}&n=${encodeURIComponent(n)}`);
+      const data  = await res.json();
+      document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+    });
+  </script>
+</body>
+</html>

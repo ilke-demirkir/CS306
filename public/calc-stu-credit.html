@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculate Student Total Credits</title>
+  <style>/* same styling */</style>
+</head>
+<body>
+  <a href="/">← Back to Home</a>
+  <h1>Calculate Student Total Credits</h1>
+  <p>Enter a student ID to see the sum of their enrolled course credits.</p>
+  <form id="creditForm">
+    <label for="stuId">Student ID:</label>
+    <input type="number" id="stuId" name="stu_id" required>
+    <button type="submit">Calculate</button>
+  </form>
+  <pre id="result"></pre>
+
+  <script>
+    document.getElementById('creditForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const stuId = document.getElementById('stuId').value;
+      const res = await fetch(`/proc/calc-stu-credit?stu_id=${encodeURIComponent(stuId)}`);
+      const data = await res.json();
+      document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+    });
+  </script>
+</body>
+</html>

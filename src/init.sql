@@ -368,7 +368,10 @@ VALUES
 (7, 'Eve', 'Taylor', '2000-03-12', 'eve.taylor@example.com'),
 (8, 'Frank', 'Anderson', '1999-09-05', 'frank.anderson@example.com'),
 (9, 'Grace', 'Harris', '2001-12-15', 'grace.harris@example.com'),
-(10, 'Henry', 'Clark', '2002-01-10', 'henry.clark@example.com');
+(10, 'Henry', 'Clark', '2002-01-10', 'henry.clark@example.com'),
+(11, 'Test', 'Trig1', '2002-01-10', 'henry.clark@example.com');
+
+
 INSERT INTO Dorm (RoomID, Building, Room) VALUES
 (1, 'A', '101'),
 (2, 'B', '202'),

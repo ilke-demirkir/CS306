@@ -5,17 +5,17 @@
   <title>Support • Your Tickets</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; }
+    nav a { margin-right: 12px; }
     label, select { display: block; margin-top: 12px; }
     select, button { padding: 6px; margin-top: 6px; }
     #ticketItems { margin-top: 20px; }
     .ticket { border: 1px solid #ccc; padding: 12px; margin-bottom: 10px; }
     .ticket a { text-decoration: none; color: #0066cc; }
-    nav a { margin-right: 12px; }
   </style>
 </head>
 <body>
   <nav>
-    <a href="/user">Home</a>
+    <a href="index.html">Home</a>
   </nav>
   <h1>Your Active Tickets</h1>
 
@@ -24,20 +24,20 @@
     <option value="">-- choose --</option>
   </select>
 
-  <div id="ticketItems">
-    <!-- populated dynamically -->
-  </div>
+  <div id="ticketItems">Select a user.</div>
 
-  <a href="/support/create"><button>Create New Ticket</button></a>
+  <a href="create.html"><button>Create New Ticket</button></a>
 
   <script>
     const userSelect = document.getElementById('usernameSelect');
     const ticketItems = document.getElementById('ticketItems');
+    let allTickets = [];
 
-    // 1) Load users who have tickets
+    // 1) Load all tickets and populate usernames
     async function loadUsers() {
-      const res = await fetch('/support/users');
-      const { users } = await res.json();
+      const res = await fetch('/tickets');
+      allTickets = await res.json();
+      const users = Array.from(new Set(allTickets.map(t => t.username)));
       users.forEach(u => {
         const opt = document.createElement('option');
         opt.value = u;
@@ -46,16 +46,14 @@
       });
     }
 
-    // 2) When a user is selected, load their tickets
-    userSelect.addEventListener('change', async () => {
+    // 2) When a user is selected, filter and display their tickets
+    userSelect.addEventListener('change', () => {
       ticketItems.innerHTML = '';
       const username = userSelect.value;
-      if (!username) return;
-      const res = await fetch(`/support?username=${encodeURIComponent(username)}`);
-      const { tickets } = await res.json();
+      if (!username) return ticketItems.textContent = 'Select a user.';
+      const tickets = allTickets.filter(t => t.username === username);
       if (tickets.length === 0) {
-        ticketItems.textContent = 'No active tickets.';
-        return;
+        return ticketItems.textContent = 'No active tickets.';
       }
       tickets.forEach(t => {
         const div = document.createElement('div');
@@ -63,13 +61,12 @@
         div.innerHTML = `
           <strong>#${t._id}</strong> • ${new Date(t.createdAt).toLocaleString()}<br>
           ${t.message}<br>
-          <a href="/support/${t._id}">View Details →</a>
+          <a href="detail.html?id=${t._id}">View Details →</a>
         `;
         ticketItems.appendChild(div);
       });
     });
 
-    // initial load
     loadUsers();
   </script>
 </body>

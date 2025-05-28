@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>List Courses by Professor</title>
+  <style>/* same styling */</style>
+</head>
+<body>
+  <a href="/">← Back to Home</a>
+  <h1>List Courses Taught by Professor</h1>
+  <p>Enter a professor’s full name to list their courses.</p>
+  <form id="profForm">
+    <label for="profName">Professor Name:</label>
+    <input type="text" id="profName" name="prof_name" required>
+    <button type="submit">List Courses</button>
+  </form>
+  <pre id="result"></pre>
+
+  <script>
+    document.getElementById('profForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const name = document.getElementById('profName').value.trim();
+      const res = await fetch(`/proc/course-professors?prof_name=${encodeURIComponent(name)}`);
+      const data = await res.json();
+      document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculate Average Student Grade</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    label, input, button { display: block; margin-top: 8px; }
+    input, button { padding: 6px; width: 200px; }
+    pre { background: #f4f4f4; padding: 10px; margin-top: 12px; }
+    a { margin-top: 20px; display: inline-block; }
+  </style>
+</head>
+<body>
+  <a href="/">← Back to Home</a>
+  <h1>Calculate Average Student Grade</h1>
+  <p>Enter a student ID to see their average grade.</p>
+  <form id="avgForm">
+    <label for="stuId">Student ID:</label>
+    <input type="number" id="stuId" name="stu_id" required>
+    <button type="submit">Calculate</button>
+  </form>
+  <pre id="result"></pre>
+
+  <script>
+    document.getElementById('avgForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const stuId = document.getElementById('stuId').value;
+      const res = await fetch(`/proc/calc-avg-grade?stu_id=${encodeURIComponent(stuId)}`);
+      const data = await res.json();
+      document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+    });
+  </script>
+</body>
+</html>

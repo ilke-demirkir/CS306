@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculate Course Average Grade</title>
+  <style>/* same styling as above */</style>
+</head>
+<body>
+  <a href="/">← Back to Home</a>
+  <h1>Calculate Course Average Grade</h1>
+  <p>Enter a course CRN to see its average student grade.</p>
+  <form id="courseForm">
+    <label for="crn">Course CRN:</label>
+    <input type="text" id="crn" name="crn" required>
+    <button type="submit">Calculate</button>
+  </form>
+  <pre id="result"></pre>
+
+  <script>
+    document.getElementById('courseForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const crn = document.getElementById('crn').value.trim();
+      const res = await fetch(`/proc/calc-course-avg?crn=${encodeURIComponent(crn)}`);
+      const data = await res.json();
+      document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+    });
+  </script>
+</body>
+</html>

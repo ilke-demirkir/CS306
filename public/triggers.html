@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Trigger Tests</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h1 { margin-bottom: 16px; }
+    section { border: 1px solid #ccc; padding: 12px; margin-bottom: 16px; }
+    section h2 { margin-top: 0; }
+    button { margin-right: 8px; padding: 6px 10px; }
+    pre { background: #f4f4f4; padding: 8px; margin-top: 8px; white-space: pre-wrap; }
+    a { display: inline-block; margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+  <!-- Back to eventual home page -->
+  <a href="/">← Back to Home</a>
+  <h1>Test Database Triggers</h1>
+
+  <!-- Trigger: check_dorm_limit -->
+  <section id="section-check-dorm-limit">
+    <h2>check_dorm_limit</h2>
+    <button data-trigger="check-dorm-limit" data-test="A">Case A: Insert 2 occupants (should succeed)</button>
+    <button data-trigger="check-dorm-limit" data-test="B">Case B: Insert 3rd occupant (should fail)</button>
+    <pre id="result-check-dorm-limit"></pre>
+  </section>
+
+  <!-- Trigger: check_department_limit -->
+  <section id="section-check-department-limit">
+    <h2>check_department_limit</h2>
+    <button data-trigger="check-department-limit" data-test="A">Case A: Join 2 departments (should succeed)</button>
+    <button data-trigger="check-department-limit" data-test="B">Case B: Join 3rd department (should fail)</button>
+    <pre id="result-check-department-limit"></pre>
+  </section>
+
+  <!-- Trigger: prof_course_limit -->
+  <section id="section-prof-course-limit">
+    <h2>prof_course_limit</h2>
+    <button data-trigger="prof-course-limit" data-test="A">Case A: Teach 2 courses (should succeed)</button>
+    <button data-trigger="prof-course-limit" data-test="B">Case B: Teach 3rd course (should fail)</button>
+    <pre id="result-prof-course-limit"></pre>
+  </section>
+
+  <!-- Trigger: prerequisite_limit -->
+  <section id="section-prerequisite-limit">
+    <h2>prerequisite_limit</h2>
+    <button data-trigger="prerequisite-limit" data-test="A">Case A: Add 2 prereqs (should succeed)</button>
+    <button data-trigger="prerequisite-limit" data-test="B">Case B: Add 3rd prereq (should fail)</button>
+    <pre id="result-prerequisite-limit"></pre>
+  </section>
+
+  <!-- Trigger: prof_faculty_limit -->
+  <section id="section-prof-faculty-limit">
+    <h2>prof_faculty_limit</h2>
+    <button data-trigger="prof-faculty-limit" data-test="A">Case A: Assign to one faculty (should succeed)</button>
+    <button data-trigger="prof-faculty-limit" data-test="B">Case B: Assign to second faculty (should fail)</button>
+    <pre id="result-prof-faculty-limit"></pre>
+  </section>
+
+  <script>
+    document.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const trig = btn.dataset.trigger;
+        const test = btn.dataset.test;
+        const res = await fetch(`/trigger/${trig}?test=${test}`);
+        const text = await res.text();
+        document.getElementById(`result-${trig}`).textContent = text;
+      });
+    });
+  </script>
+</body>
+</html>

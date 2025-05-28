@@ -15,7 +15,7 @@
 </head>
 <body>
   <nav>
-    <a href="/support">Back to Ticket List</a>
+    <a href="support.html">← Back to Ticket List</a>
   </nav>
 
   <h1>Ticket Details</h1>
@@ -37,7 +37,8 @@
   </div>
 
   <script>
-    const ticketId = location.pathname.split('/').pop();
+    const params = new URLSearchParams(location.search);
+    const ticketId = params.get('id');
     const fields = {
       id: document.getElementById('ticketId'),
       user: document.getElementById('ticketUser'),
@@ -48,9 +49,12 @@
       commentMsg: document.getElementById('commentMsg')
     };
 
-    // Load ticket details
     async function loadTicket() {
-      const res = await fetch(`/support/${ticketId}`);
+      const res = await fetch(`/tickets/${ticketId}`);
+      if (!res.ok) {
+        fields.body.textContent = 'Ticket not found.';
+        return;
+      }
       const t = await res.json();
       fields.id.textContent = t._id;
       fields.user.textContent = t.username;
@@ -68,7 +72,6 @@
       });
     }
 
-    // Submit a new comment
     document.getElementById('submitComment').addEventListener('click', async () => {
       const text = document.getElementById('newComment').value.trim();
       fields.commentMsg.textContent = '';
@@ -76,26 +79,20 @@
         fields.commentMsg.textContent = 'Comment cannot be empty.';
         return;
       }
-
-      try {
-        const res = await fetch(`/support/${ticketId}/comments`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text })
-        });
-        if (res.ok) {
-          document.getElementById('newComment').value = '';
-          loadTicket();  // refresh comments
-        } else {
-          const err = await res.json();
-          fields.commentMsg.textContent = err.error || 'Could not add.';
-        }
-      } catch {
-        fields.commentMsg.textContent = 'Network error.';
+      const res = await fetch(`/tickets/${ticketId}/comments`, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ text })
+      });
+      if (res.ok) {
+        document.getElementById('newComment').value = '';
+        loadTicket();
+      } else {
+        const err = await res.json();
+        fields.commentMsg.textContent = err.error || 'Could not add comment.';
       }
     });
 
-    // initial fetch
     loadTicket();
   </script>
 </body>
